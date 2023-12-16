@@ -14,7 +14,8 @@
 
 
     </ul>
-    <div class="add-form">
+    <div id="comments-loading" class="comments-loading">Пожалуйста ожидайте, комментарии загружаются...</div>
+    <div id="add-form" class="add-form">
       <input type="text" id="name-input" class="add-form-name" placeholder="Введите ваше имя" />
       <textarea type="textarea" id="textarea-input" class="add-form-text" placeholder="Введите ваш коментарий"
         rows="4"></textarea>
@@ -35,6 +36,8 @@
   const listElement = document.getElementById("list");
   const nameInputElement = document.getElementById("name-input");
   const textareaInputElement = document.getElementById("textarea-input");
+  const commentsLoading = document.getElementById("comments-loading");
+  const addForm = document.getElementById("add-form");
 
   const formatDateTime = (date) => {
     const day = String(date.getDate()).padStart(2, '0');
@@ -44,41 +47,44 @@
     const hours = String(date.getHours()).padStart(2, '0');
     return `${day}.${month}.${year} ${hours}:${minutes}`;
   };
-let comments=[]
+  let comments = []
+  const fetchAndRenderComments = () => {
 
-  const fetchPromise = fetch("https://wedev-api.sky.pro/api/v1/anna-kozhevnikova/comments", {
-    method: "GET"
-  });
-  // подписываемся на успешное завершение запроса с помощью then
-  fetchPromise.then((responce) => {
-    // Запускаем преобразовываем "сырые" данные от API в json формат
-    const jsonPromise = responce.json()
-    // Подписываемся на результат преобразования
-    jsonPromise.then((responceData) => {
-      //преобразовываем данные из api в формат приложения
-      const appComments = responceData.comments.map((comment) => {
-        return {
-          //достаем имя автора
-          name: comment.author.name,
-          //преобразовываем дату в Date
-          date: formatDateTime(new Date(comment.date)),
-          text: comment.text,
-          likes: comment.likes,
-          isLiked: false,
-        };
-      });
-      comments = appComments;
-      renderComment();
+    const fetchPromise = fetch("https://wedev-api.sky.pro/api/v1/anna-kozhevnikova/comments", {
+      method: "GET"
     });
-  });
+    // подписываемся на успешное завершение запроса с помощью then
+    fetchPromise.then((responce) => {
+      // Запускаем преобразовываем "сырые" данные от API в json формат
+      const jsonPromise = responce.json()
+      // Подписываемся на результат преобразования
+      jsonPromise.then((responceData) => {
+        //преобразовываем данные из api в формат приложения
+        const appComments = responceData.comments.map((comment) => {
+          return {
+            //достаем имя автора
+            name: comment.author.name,
+            //преобразовываем дату в Date
+            date: formatDateTime(new Date(comment.date)),
+            text: comment.text,
+            likes: comment.likes,
+            isLiked: false,
+          };
+        });
+        commentsLoading.classList.add("hidden");
 
+        comments = appComments;
+        renderComment();
+      });
+    });
+  }
 
-
+  fetchAndRenderComments();
 
   //рендер комментария
 
   const renderComment = () => {
-    const commentHtml =comments.map((comment, index) => {
+    const commentHtml = comments.map((comment, index) => {
       return `<li class="comment" data-name="${comment.name}" data-text="${comment.text}">
           <div class="comment-header">
             <div>${comment.name}</div>
@@ -145,8 +151,10 @@ let comments=[]
       return;
     }
 
-
-    const fetchPromise = fetch(
+    addForm.disabled = true;
+    addForm.classList.remove("add-form");
+    addForm.innerHTML = "Элемент добавляется...";
+    fetch(
       "https://wedev-api.sky.pro/api/v1/anna-kozhevnikova/comments",
       {
         method: "POST",
@@ -157,42 +165,24 @@ let comments=[]
           likes: 0,
           isLiked: false,
         }),
-      });
-    //подписываемся на успешное завершение запроса
-    fetchPromise.then((responce) => {
-      //запускаем преобразование данных из api в json 
-      const jsonPromise = responce.json();
-      //подписываемся на результат преобразования
-      jsonPromise.then((responceData) => {
-
-      });
-      const fetchPromise = fetch("https://wedev-api.sky.pro/api/v1/anna-kozhevnikova/comments", {
-        method: "GET"
-      });
-      // подписываемся на успешное завершение запроса с помощью then
-      fetchPromise.then((responce) => {
-        // Запускаем преобразовываем "сырые" данные от API в json формат
-        const jsonPromise = responce.json()
-        // Подписываемся на результат преобразования
-        jsonPromise.then((responceData) => {
-          //преобразовываем данные из api в формат приложения
-          const appComments = responceData.comments.map((comment) => {
-            return {
-              //достаем имя автора
-              name: comment.author.name,
-              //преобразовываем дату в Date
-              date: formatDateTime(new Date(comment.date)),
-              text: comment.text,
-              likes: comment.likes,
-              isLiked: false,
-            };
-          });
-          comments = appComments;
-          renderComment();
-        });
-      });
-    });
-
+      })
+      .then((responce) => {
+        return responce.json();
+      })
+      .then(() => {
+        return fetchAndRenderComments();
+      })
+      .then(() => {
+        addForm.disabled = false;
+        addForm.classList.add("add-form");
+        addForm.innerHTML = `<input type="text" id="name-input" class="add-form-name" placeholder="Введите ваше имя" />
+      <textarea type="textarea" id="textarea-input" class="add-form-text" placeholder="Введите ваш коментарий"
+        rows="4"></textarea>
+      <div class="add-form-row">
+        <button id="add-button" class="add-form-button">Написать</button>
+      </div>`
+      })
+    
 
     nameInputElement.value = "";
     textareaInputElement.value = '';
