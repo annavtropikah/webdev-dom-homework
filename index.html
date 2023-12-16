@@ -22,7 +22,9 @@
       <div class="add-form-row">
         <button id="add-button" class="add-form-button">Написать</button>
       </div>
+      
     </div>
+    <div id="add-comment" class="div"></div>
   </div>
 </body>
 <style>
@@ -38,6 +40,7 @@
   const textareaInputElement = document.getElementById("textarea-input");
   const commentsLoading = document.getElementById("comments-loading");
   const addForm = document.getElementById("add-form");
+  const addComment = document.getElementById("add-comment");
 
   const formatDateTime = (date) => {
     const day = String(date.getDate()).padStart(2, '0');
@@ -150,10 +153,10 @@
 
       return;
     }
-
-    addForm.disabled = true;
-    addForm.classList.remove("add-form");
-    addForm.innerHTML = "Элемент добавляется...";
+  
+    
+    addForm.classList.add("hidden");
+    addComment.innerHTML = "Элемент добавляется...";
     fetch(
       "https://wedev-api.sky.pro/api/v1/anna-kozhevnikova/comments",
       {
@@ -173,19 +176,23 @@
         return fetchAndRenderComments();
       })
       .then(() => {
-        addForm.disabled = false;
-        addForm.classList.add("add-form");
-        addForm.innerHTML = `<input type="text" id="name-input" class="add-form-name" placeholder="Введите ваше имя" />
-      <textarea type="textarea" id="textarea-input" class="add-form-text" placeholder="Введите ваш коментарий"
-        rows="4"></textarea>
-      <div class="add-form-row">
-        <button id="add-button" class="add-form-button">Написать</button>
-      </div>`
-      })
-    
+        
+        addForm.classList.remove("hidden");
+        addComment.classList.add("hidden");
 
-    nameInputElement.value = "";
-    textareaInputElement.value = '';
+        nameInputElement.value = "";
+        textareaInputElement.value = '';
+      })
+      .catch((error) => {
+       
+        addForm.classList.remove("hidden");
+        addComment.classList.add("hidden");
+        alert("отсутствует подключение к интернету, повторите попытку позже");
+        //todo:отправлять в систему сбора ошибок
+        console.warn(error);
+      });
+
+
     renderComment();
   };
 

@@ -147,3 +147,6 @@ body {
     padding: 10px;
     margin-bottom: 24px;
   }
+  .hidden {
+    display: none;
+  }
