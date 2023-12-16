@@ -170,7 +170,12 @@
         }),
       })
       .then((responce) => {
-        return responce.json();
+         if (responce.status===201) {
+          return responce.json();
+         } else {
+          return Promise.reject("сервер упал");
+         }
+        
       })
       .then(() => {
         return fetchAndRenderComments();
@@ -187,7 +192,7 @@
        
         addForm.classList.remove("hidden");
         addComment.classList.add("hidden");
-        alert("отсутствует подключение к интернету, повторите попытку позже");
+        alert("Что-то пошло не так, возможно вы веели имя короче 3-х символов");
         //todo:отправлять в систему сбора ошибок
         console.warn(error);
       });
