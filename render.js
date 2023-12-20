@@ -1,5 +1,6 @@
-const listElement = document.getElementById("list");
+import { initAnswerCommentListeners, initLikeListeners } from "./main.js";
 
+const listElement = document.getElementById("list");
 
 export const renderComment = ({comments}) => {
     const commentHtml = comments.map((comment, index) => {

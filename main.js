@@ -36,7 +36,7 @@ const fetchAndRenderComments = () => {
 fetchAndRenderComments();
 
 
-const initLikeListeners = () => {
+export const initLikeListeners = () => {
     const likeButtons = document.querySelectorAll('.like-button');
     for (const likeButton of likeButtons) {
         likeButton.addEventListener('click', (event) => {
@@ -53,7 +53,7 @@ const initLikeListeners = () => {
 
 // answer a comment
 
-const initAnswerCommentListeners = () => {
+export const initAnswerCommentListeners = () => {
     const commentsList = document.querySelectorAll('.comment');
     for (const theComment of commentsList) {
         theComment.addEventListener('click', () => {
