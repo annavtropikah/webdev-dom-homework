@@ -129,7 +129,7 @@ body {
   .form-name {
     background-color: #f1fad1;
   }
-  .register {
+  .log {
     margin-top: 22px;
     margin-bottom: 12px;
     text-align: center;
@@ -165,7 +165,7 @@ body {
   .hidden {
     display: none;
   }
-  .reg-form-button {
+  .log-form-button {
     margin-top: 24px;
     font-size: 24px;
     width: 100%;
