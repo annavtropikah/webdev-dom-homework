@@ -76,10 +76,10 @@ ${commentHtml}
   // new comment
 
   const addNewComment = () => {
-    
+
     const textareaInputElement = document.getElementById("textarea-input");
 
-    
+
     textareaInputElement.classList.remove("error");
 
     if (textareaInputElement.value === "") {
@@ -95,9 +95,9 @@ ${commentHtml}
     const addComment = document.getElementById("add-comment");
 
     addForm.classList.add("hidden");
-    
-    addComment.innerHTML = "Элемент добавляется...";
 
+    addComment.innerHTML = "Элемент добавляется...";
+    console.log(addComment.innerHTML);
 
 
 
@@ -110,8 +110,8 @@ ${commentHtml}
 
           fetchAndRenderComments()
 
-          
-          
+
+
           addForm.classList.remove("hidden");
           addComment.classList.add("hidden");
           textareaInputElement.value = '';
@@ -135,8 +135,6 @@ ${commentHtml}
         console.warn(error);
       })
 
-
-    renderComment();
   };
 
   if (token) {
