@@ -103,7 +103,10 @@ body {
   }
 
   .add-form-name,
-  .add-form-text {
+  .add-form-text,
+  .form-password,
+  .form-name 
+   {
     font-size: 16px;
     font-family: Helvetica;
     border-radius: 8px;
@@ -114,13 +117,25 @@ body {
     width: 300px;
     padding: 11px 22px;
   }
-
-  .add-form-text {
+  
+  .add-form-text,
+  .form-password,
+  .form-name {
     margin-top: 12px;
     padding: 22px;
     resize: none;
   }
-
+  .form-password,
+  .form-name {
+    background-color: #f1fad1;
+  }
+  .register {
+    margin-top: 22px;
+    margin-bottom: 12px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 24px;
+  }
   .add-form-row {
     display: flex;
     justify-content: flex-end;
@@ -149,4 +164,14 @@ body {
   }
   .hidden {
     display: none;
+  }
+  .reg-form-button {
+    margin-top: 24px;
+    font-size: 24px;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #bcec30;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
   }
