@@ -129,12 +129,16 @@ body {
   .form-name {
     background-color: #f1fad1;
   }
-  .log {
+  .reg {
+
     margin-top: 22px;
     margin-bottom: 12px;
     text-align: center;
     color: #ffffff;
     font-size: 24px;
+    border: none;
+    background-color: transparent;
+    text-decoration: underline;
   }
   .add-form-row {
     display: flex;

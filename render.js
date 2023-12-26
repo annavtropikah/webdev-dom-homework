@@ -7,9 +7,6 @@ import { renderLogin } from './renderLogin.js';
 
 
 
-
-// const listElement = document.getElementById("list");
-
 export const renderComment = () => {
   const appElement = document.getElementById("app");
 
@@ -37,7 +34,7 @@ export const renderComment = () => {
     if (!token) return btnLogin;
     return `
   <div id="add-form" class="add-form">
-  <input type="text" id="name-input" class="add-form-name" placeholder="Введите ваше имя" value="${user.name}" readonly/>
+  <input type="text" id="name-input" class="add-form-name" value="${user.name}" readonly/>
   <textarea type="textarea" id="textarea-input" class="add-form-text" placeholder="Введите ваш коментарий"
     rows="4"></textarea>
   <div class="add-form-row">
@@ -45,7 +42,7 @@ export const renderComment = () => {
   </div>
 
 </div>
-<div id="add-comment" class="div"></div>
+<div id="add-comment" ></div>
 `
   }
 
@@ -79,16 +76,13 @@ ${commentHtml}
   // new comment
 
   const addNewComment = () => {
-    const nameInputElement = document.getElementById("name-input");
+    
     const textareaInputElement = document.getElementById("textarea-input");
 
-    nameInputElement.classList.remove("error");
+    
     textareaInputElement.classList.remove("error");
 
-    if (nameInputElement.value === "") {
-      nameInputElement.classList.add("error");
-      return;
-    } else if (textareaInputElement.value === "") {
+    if (textareaInputElement.value === "") {
       textareaInputElement.classList.add("error");
 
       return;
@@ -96,16 +90,12 @@ ${commentHtml}
 
 
 
-
-
-
-    
     //отвалилось
     const addForm = document.getElementById("add-form");
     const addComment = document.getElementById("add-comment");
-    
+
     addForm.classList.add("hidden");
-    addComment.classList.remove("hidden");
+    
     addComment.innerHTML = "Элемент добавляется...";
 
 
@@ -119,11 +109,12 @@ ${commentHtml}
         if (response.status === 201) {
 
           fetchAndRenderComments()
-      
-          nameInputElement.value = "";
-          textareaInputElement.value = '';
+
+          
+          
           addForm.classList.remove("hidden");
           addComment.classList.add("hidden");
+          textareaInputElement.value = '';
 
           return
         }

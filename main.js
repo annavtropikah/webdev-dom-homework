@@ -25,7 +25,6 @@ export const fetchAndRenderComments = () => {
                 isLiked: false,
             };
         });
-        // commentsLoading.classList.add("hidden");
         comments = appComments;
         renderComment();
 
@@ -33,5 +32,5 @@ export const fetchAndRenderComments = () => {
 };
 
 fetchAndRenderComments();
-// renderLogin({fetchAndRenderComments});
+
 
