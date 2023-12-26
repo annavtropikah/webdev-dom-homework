@@ -1,17 +1,20 @@
 
 
-import { getComments} from './api.js';
+import { getComments } from './api.js';
 
 import { formatDateTime } from './formatDateTime.js';
 
 import { renderComment } from './render.js';
-import { renderLogin } from './renderLogin.js';
+// import { renderLogin } from './renderLogin.js';
 
+export let user = null;
+export const setUser = (newUser) => {
+    user = newUser;
+};
 
+export let comments = [];
 
-let comments = [];
-
-const fetchAndRenderComments = () => {
+export const fetchAndRenderComments = () => {
     getComments().then((responceData) => {
         const appComments = responceData.comments.map((comment) => {
             return {
@@ -24,11 +27,11 @@ const fetchAndRenderComments = () => {
         });
         // commentsLoading.classList.add("hidden");
         comments = appComments;
-        renderComment({ comments });
-        
+        renderComment();
+
     });
 };
 
-// fetchAndRenderComments();
-renderLogin({fetchAndRenderComments});
+fetchAndRenderComments();
+// renderLogin({fetchAndRenderComments});
 

@@ -1,14 +1,16 @@
 
 import { sanitizeHtml } from './sanitizeHtml.js';
 
-import { postComment } from './api.js';
+import { postComment, token } from './api.js';
+import { comments, fetchAndRenderComments, user } from './main.js';
+import { renderLogin } from './renderLogin.js';
 
 
 
 
-const listElement = document.getElementById("list");
+// const listElement = document.getElementById("list");
 
-export const renderComment = ({ comments,fetchAndRenderComments }) => {
+export const renderComment = () => {
   const appElement = document.getElementById("app");
 
   const commentHtml = comments.map((comment, index) => {
@@ -31,123 +33,157 @@ export const renderComment = ({ comments,fetchAndRenderComments }) => {
           </li>`;
   }).join('');
 
+  const formHtml = () => {
+    if (!token) return btnLogin;
+    return `
+  <div id="add-form" class="add-form">
+  <input type="text" id="name-input" class="add-form-name" placeholder="Введите ваше имя" value="${user.name}" readonly/>
+  <textarea type="textarea" id="textarea-input" class="add-form-text" placeholder="Введите ваш коментарий"
+    rows="4"></textarea>
+  <div class="add-form-row">
+    <button id="add-button" class="add-form-button">Написать</button>
+  </div>
+
+</div>
+<div id="add-comment" class="div"></div>
+`
+  }
+
+  const btnLogin = `
+<p class="render-login-btn">  Чтобы добавить комментарий, <u>авторизуйтесь</u> </p>
+`
+  function actionRenderLoginbtn() {
+    if (token) return
+    const btn = document.querySelector(".render-login-btn")
+    btn.addEventListener('click', () => {
+      renderLogin()
+    })
+  }
 
   const appHtml = `
     <div class="container">
     <ul id="list" class="comments">
 
 ${commentHtml}
-
     </ul>
-    <div id="comments-loading" class="comments-loading">Пожалуйста ожидайте, комментарии загружаются...</div>
-    <div id="add-form" class="add-form">
-      <input type="text" id="name-input" class="add-form-name" placeholder="Введите ваше имя" />
-      <textarea type="textarea" id="textarea-input" class="add-form-text" placeholder="Введите ваш коментарий"
-        rows="4"></textarea>
-      <div class="add-form-row">
-        <button id="add-button" class="add-form-button">Написать</button>
-      </div>
-
-    </div>
-    <div id="add-comment" class="div"></div>
+   ${formHtml()}
   </div>
     `;
 
   appElement.innerHTML = appHtml;
 
-
-  
-  const buttonElement = document.getElementById('add-button');
-  const nameInputElement = document.getElementById("name-input");
-  const addForm = document.getElementById("add-form");
-  const addComment = document.getElementById("add-comment");
-  const textareaInputElement = document.getElementById("textarea-input");
+  actionRenderLoginbtn();
 
 
 
-// new comment
+  // new comment
 
-const addNewComment = () => {
-  nameInputElement.classList.remove("error");
-  textareaInputElement.classList.remove("error");
+  const addNewComment = () => {
+    const nameInputElement = document.getElementById("name-input");
+    const textareaInputElement = document.getElementById("textarea-input");
 
-  if (nameInputElement.value === "") {
-    nameInputElement.classList.add("error");
-    return;
-  } else if (textareaInputElement.value === "") {
-    textareaInputElement.classList.add("error");
+    nameInputElement.classList.remove("error");
+    textareaInputElement.classList.remove("error");
 
-    return;
-  }
-  addForm.classList.add("hidden");
-  addComment.classList.remove("hidden");
-  addComment.innerHTML = "Элемент добавляется...";
-  
-  postComment({
-    name: sanitizeHtml(nameInputElement.value),
-    text: sanitizeHtml(textareaInputElement.value),
-    /*forceError: true,*/
-  })
-    .then((response) => {
-      if (response.status === 201) {
-        fetchAndRenderComments()
+    if (nameInputElement.value === "") {
+      nameInputElement.classList.add("error");
+      return;
+    } else if (textareaInputElement.value === "") {
+      textareaInputElement.classList.add("error");
 
-        nameInputElement.value = "";
-        textareaInputElement.value = '';
+      return;
+    }
+
+
+
+
+
+
+    
+    //отвалилось
+    const addForm = document.getElementById("add-form");
+    const addComment = document.getElementById("add-comment");
+    
+    addForm.classList.add("hidden");
+    addComment.classList.remove("hidden");
+    addComment.innerHTML = "Элемент добавляется...";
+
+
+
+
+    postComment({
+      text: sanitizeHtml(textareaInputElement.value),
+
+    })
+      .then((response) => {
+        if (response.status === 201) {
+
+          fetchAndRenderComments()
+      
+          nameInputElement.value = "";
+          textareaInputElement.value = '';
+          addForm.classList.remove("hidden");
+          addComment.classList.add("hidden");
+
+          return
+        }
+        if (response.status === 400) {
+          return Promise.reject("вы ввели имя короче 3-х символов");
+        }
+        if (response.status === 500) {
+          return Promise.reject("ошибка сервера");
+        }
+        return Promise.reject("сервер упал");
+
+      })
+      .catch((error) => {
         addForm.classList.remove("hidden");
         addComment.classList.add("hidden");
-
-        return
-      }
-      if (response.status === 400) {
-        return Promise.reject("вы ввели имя короче 3-х символов");
-      }
-      if (response.status === 500) {
-        return Promise.reject("ошибка сервера");
-      }
-      return Promise.reject("сервер упал");
-
-    })
-    .catch((error) => {
-      addForm.classList.remove("hidden");
-      addComment.classList.add("hidden");
-      alert(error);
-      //todo:отправлять в систему сбора ошибок??
-      console.warn(error);
-    })
+        alert(error);
+        //todo:отправлять в систему сбора ошибок??
+        console.warn(error);
+      })
 
 
-  renderComment({ comments });
-};
-  
+    renderComment();
+  };
 
-  buttonElement.addEventListener('click', addNewComment);
+  if (token) {
+    const buttonElement = document.getElementById('add-button');
 
+    buttonElement.addEventListener('click', addNewComment);
+  }
 
-
-
-  initLikeListeners({ comments });
+  initLikeListeners();
   initAnswerCommentListeners();
 
 };
 
 
 
-const initLikeListeners = ({ comments }) => {
+
+
+
+const initLikeListeners = () => {
   const likeButtons = document.querySelectorAll('.like-button');
   for (const likeButton of likeButtons) {
     likeButton.addEventListener('click', (event) => {
       event.stopPropagation();
+      if (!token) {
+        alert("autorize")
+        return
+      }
       const index = likeButton.dataset.index;
       comments[index].likes += comments[index].isLiked ? -1 : +1;
       comments[index].isLiked = !comments[index].isLiked;
 
-      renderComment({ comments });
+      renderComment();
     });
   }
 };
 // answer a comment
 export const initAnswerCommentListeners = () => {
+  const textareaInputElement = document.getElementById("textarea-input");
   const commentsList = document.querySelectorAll('.comment');
   for (const theComment of commentsList) {
     theComment.addEventListener('click', () => {

@@ -1,10 +1,10 @@
 import { login, setToken, token } from "./api.js";
-
+import { fetchAndRenderComments, setUser } from './main.js';
 
 
 
 //отрисовка формы входа
-export const renderLogin = ({fetchAndRenderComments}) => {
+export const renderLogin = () => {
     const appElement = document.getElementById("app");
     const loginHtml = `
 <div class="container">
@@ -22,17 +22,22 @@ export const renderLogin = ({fetchAndRenderComments}) => {
 appElement.innerHTML=loginHtml;
 
 const buttonElement = document.getElementById("log-button");
-const loginInputElemen = document.getElementById("login-input");
+const loginInputElement = document.getElementById("login-input");
 const passwordInputElement = document.getElementById("password-input");
 
 
 buttonElement.addEventListener("click",()=>{
+  if (!loginInputElement.value || !passwordInputElement.value) {
+    alert("Проверьте оба поля  на заполненность");
+    return
+  }
     login({
-        login:loginInputElemen.value,
+        login:loginInputElement.value,
         password:passwordInputElement.value,
     }).then((responseData)=>{
 setToken(responseData.user.token);
-console.log(token);
+setUser(responseData.user);
+
     }).then(()=>{
         fetchAndRenderComments();
     })

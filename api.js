@@ -3,7 +3,7 @@ const host = "https://wedev-api.sky.pro/api/v2/anna-kozhevnikova/comments";
 const userUrl = "https://wedev-api.sky.pro/api/user/login";
 
 //важно ,чтобы объявление и функция по переопределению были в одном модуле, тогда при экспорте ошибки с типом(константой) не будет. При импорте переменные становятся константами
-export let token;
+export let token=null;
 export const setToken = (newToken) => {
     token = newToken;
 };
@@ -24,7 +24,7 @@ export function getComments() {
     })
 }
 
-export function postComment({ name, text }) {
+export function postComment({ text }) {
     return fetch(host,
         {
             method: "POST",
@@ -32,9 +32,8 @@ export function postComment({ name, text }) {
                 Authorization:`Bearer ${token}`,
             },
             body: JSON.stringify({
-                name: name,
                 text: text,
-                /*forceError: true*/
+                
             }),
         })
 }
@@ -49,9 +48,22 @@ export function login({ login, password }) {
         }),
     }).then((response) => {
         if (response.status === 201) {
-            console.log("вот комментарии");
+            console.log("вот страница с комментариями и формой");
             //отрисуй страницу комментариев с формой ввода комментария
+            return response.json();
         }
-        return response.json();
-    });
-}
+        if (response.status === 400) {
+            return Promise.reject("вы ввели не верный логин или пароль");
+          }
+          if (response.status === 500) {
+            return Promise.reject("ошибка сервера");
+          }
+          return Promise.reject("сервер упал");
+  
+        })
+        .catch((error) => {
+          alert(error);
+          //todo:отправлять в систему сбора ошибок??
+          console.warn(error);
+        })
+    };
