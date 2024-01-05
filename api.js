@@ -4,7 +4,8 @@ const userUrl = "https://wedev-api.sky.pro/api/user/login";
 const userUrlReg = "https://wedev-api.sky.pro/api/user";
 
 //важно ,чтобы объявление и функция по переопределению были в одном модуле, тогда при экспорте ошибки с типом(константой) не будет. При импорте переменные становятся константами
-export let token = null;
+export let token = localStorage.getItem("token");
+console.log(token);
 export const setToken = (newToken) => {
     token = newToken;
 };
