@@ -43,8 +43,20 @@ export const renderComment = () => {
 
 </div>
 <div id="add-comment" ></div>
+<button id="exit-button" class="add-form-button">Выйти</button>
 `
   }
+
+
+  function exit() {
+    const exitButton = document.getElementById("exit-button");
+    exitButton?.addEventListener('click', () => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      renderLogin();
+    })
+  }
+
 
   const btnLogin = `
 <p class="render-login-btn">  Чтобы добавить комментарий, <u>авторизуйтесь</u> </p>
@@ -71,7 +83,7 @@ ${commentHtml}
 
   actionRenderLoginbtn();
 
-
+  exit();
 
   // new comment
 
@@ -89,8 +101,6 @@ ${commentHtml}
     }
 
 
-
-    //отвалилось
     const addForm = document.getElementById("add-form");
     const addComment = document.getElementById("add-comment");
 

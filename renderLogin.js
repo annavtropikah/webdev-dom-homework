@@ -1,4 +1,4 @@
-import { login, register, setToken, token } from "./api.js";
+import { login, register, setToken } from "./api.js";
 import { fetchAndRenderComments, setUser } from './main.js';
 
 
@@ -37,6 +37,9 @@ export const renderLogin = () => {
       login: loginInputElement.value,
       password: passwordInputElement.value,
     }).then((responseData) => {
+      localStorage.setItem("token", responseData.user.token);
+      localStorage.setItem("user", JSON.stringify(responseData.user));
+
       setToken(responseData.user.token);
       setUser(responseData.user);
 
@@ -45,6 +48,13 @@ export const renderLogin = () => {
     })
   });
 
+//почему зачеркивает? какой метод актуальный как заменить?
+passwordInputElement.addEventListener('keypress', function (e) {
+    let key = e.which || e.key
+    if (key === 13) { // код клавиши Enter
+      buttonElement.click();
+    }
+});
 
 
 
