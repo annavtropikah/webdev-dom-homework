@@ -4,31 +4,31 @@
 <head>
   <title>Проект "Комменты"</title>
   <meta charset="utf-8" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="./styles.css" />
 </head>
 
 <body>
 
 
-  <div class="container">   
-    <div id="reg-form" class="add-form">
+  <div class="container">
+    <div id="log-form" class="add-form">
       <h3>Форма входа</h3>
-      <input type="text" id="name-input" class="form-name" placeholder="Введите логин" />
+      <input type="text" id="login-input" class="form-name" placeholder="Введите логин" />
       <input type="password" id="password-input" class="form-password" placeholder="Введите пароль" />
       <div class="add-form-row">
-        <button id="reg-button" class="reg-form-button">Войти</button>
+        <button id="log-button" class="log-form-button">Войти</button>
       </div>
-      <a class="register" href="#">Зарегистрироваться</a>
+      <a class="log" href="#">Зарегистрироваться</a>
     </div>
   </div>
 
-
+ 
 </body>
 <style>
   .error {
     background-color: red;
   }
 </style>
-
+<script type="module" src="./loginPage.js"></script>
 
 </html>
