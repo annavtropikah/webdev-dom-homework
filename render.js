@@ -43,7 +43,19 @@ export const renderComment = () => {
 
 </div>
 <div id="add-comment" ></div>
+<button id="exit-button" class="add-form-button">Выйти</button>
 `
+  }
+
+
+
+  function exit() {
+    const exitButton = document.getElementById("exit-button");
+    exitButton?.addEventListener('click', () => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      renderLogin();
+    })
   }
 
   const btnLogin = `
@@ -70,7 +82,7 @@ ${commentHtml}
   appElement.innerHTML = appHtml;
 
   actionRenderLoginbtn();
-
+exit();
 
 
   // new comment
@@ -141,8 +153,10 @@ ${commentHtml}
     const buttonElement = document.getElementById('add-button');
 
     buttonElement.addEventListener('click', addNewComment);
+    
   }
 
+  
   initLikeListeners();
   initAnswerCommentListeners();
 
