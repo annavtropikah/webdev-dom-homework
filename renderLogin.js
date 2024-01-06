@@ -48,8 +48,11 @@ export const renderLogin = () => {
     })
   });
 
-//почему зачеркивает? какой метод актуальный как заменить?
-passwordInputElement.addEventListener('keypress', function (e) {
+
+//почему зачеркивает which? какой метод актуальный как заменить?
+  
+  passwordInputElement.addEventListener('keypress', function (e) {
+
     let key = e.which || e.key
     if (key === 13) { // код клавиши Enter
       buttonElement.click();
@@ -63,10 +66,6 @@ passwordInputElement.addEventListener('keypress', function (e) {
     renderRegin();
   });
 };
-
-
-
-
 
 
 

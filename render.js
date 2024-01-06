@@ -48,6 +48,7 @@ export const renderComment = () => {
   }
 
 
+
   function exit() {
     const exitButton = document.getElementById("exit-button");
     exitButton?.addEventListener('click', () => {
@@ -83,7 +84,7 @@ ${commentHtml}
 
   actionRenderLoginbtn();
 
-  exit();
+exit();
 
   // new comment
 
@@ -151,8 +152,10 @@ ${commentHtml}
     const buttonElement = document.getElementById('add-button');
 
     buttonElement.addEventListener('click', addNewComment);
+    
   }
 
+  
   initLikeListeners();
   initAnswerCommentListeners();
 
